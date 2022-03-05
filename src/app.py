@@ -10,6 +10,8 @@ import pandas as pd
 
 
 alt.data_transformers.enable("data_server")
+alt.renderers.set_embed_options(actions=False)
+
 data = pd.read_csv("data/imdb_2011-2020.csv")
 country_codes = pd.read_csv("data/country_codes.csv")
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
@@ -31,28 +33,30 @@ app.layout = dbc.Container([
     dbc.Row([
         # First column containing filters separated by dividers
         dbc.Col([
-            # Genre Checklist
             html.Div([
+                # Genre Checklist
                 html.H6(
                     "Select Genre(s):",
                     style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
                 dbc.Checklist(
+                    id="genres-checklist",
                     options=[
                         {"label": genre, "value": genre} for genre in sorted(
                             data.genres.unique().astype(str)
                             ) if genre != "nan"
                         ],
                     value=["Action", "Horror", "Romance"],
-                    id="genres-checklist",
                     style={'width': "150px", 'height': "100%"}
                 ),
+                html.Br(),
                 # Region dropdown
                 html.H6(
                     "Select Region(s):",
                     style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.Dropdown(
+                    id="region-checklist",
                     options=[
                         {"label": region, "value": region} for region in sorted(
                             data.region.unique().astype(str)
@@ -62,8 +66,42 @@ app.layout = dbc.Container([
                     clearable=False,
                     placeholder="Select Region(s)",
                     value=["US", "IN", "UK"],
-                    id="region-checklist",
                     style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
+                ),
+                html.Br(),
+                # Top N actors
+                html.H6(
+                    "Top N (actors):",
+                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                ),
+                dcc.Slider(
+                    id="top_n",
+                    min=1,
+                    max=15,
+                    step=1,
+                    value=10,
+                    marks=None,
+                    included=False,
+                    tooltip={"placement": "bottom", "always_visible": True}
+                ),
+                html.Br(),
+                # Years
+                html.H6(
+                    "Years:",
+                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                ),
+                dcc.RangeSlider(
+                    id="years-range",
+                    marks={
+                        2011: '2011',
+                        2020: '2020'
+                    },
+                    min=2011,
+                    max=2020,
+                    step=1,
+                    value=[2011, 2020],
+                    dots=True,
+                    tooltip={"placement": "bottom", "always_visible": False}
                 )
             ])
         ],
@@ -85,8 +123,8 @@ app.layout = dbc.Container([
                     dbc.Row([
                         html.Div([
                             html.H2(
-                                "100",
-                                style={'width': "150px", 'height': "50px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506"}
+                                children=[html.Div(id='total_movies', style={'display': 'inline'})],
+                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
                             )
                         ]),
                     ]),
@@ -102,8 +140,8 @@ app.layout = dbc.Container([
                     dbc.Row([
                         html.Div([
                             html.H2(
-                                "50",
-                                style={'width': "150px", 'height': "50px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506"}
+                                children=[html.Div(id='total_actors', style={'display': 'inline'})],
+                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
                             )
                         ])
                     ]),
@@ -119,8 +157,11 @@ app.layout = dbc.Container([
                     dbc.Row([
                         html.Div([
                             html.H2(
-                                "120",
-                                style={'width': "150px", 'height': "50px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506"}
+                                children=[
+                                    html.Div(id='avg_runtime', style={'display': 'inline'}),
+                                    html.Div("mins", style={'display': 'inline', 'font-size': "15px"})
+                                ],
+                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
                             )
                         ])
                     ]),
@@ -136,8 +177,8 @@ app.layout = dbc.Container([
                     dbc.Row([
                         html.Div([
                             html.H2(
-                                "10",
-                                style={'width': "150px", 'height': "50px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506"}
+                                children=[html.Div(id='avg_rating', style={'display': 'inline'})],
+                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
                             )
                         ])
                     ])  
@@ -158,7 +199,7 @@ app.layout = dbc.Container([
                         html.Div([
                             html.Iframe(
                                 id='box',
-                                style={'width': "500px", 'height': "350px"}
+                                style={'width': "500px", 'height': "350px", 'border': "1px solid gold"}
                             )
                         ])
                     ])
@@ -171,7 +212,7 @@ app.layout = dbc.Container([
                         html.Div([
                             html.H6(
                                 "Average Rating by Genre over Time",
-                                style={'width': "400px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "420px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                             )
                         ])
                     ]),
@@ -179,7 +220,7 @@ app.layout = dbc.Container([
                         html.Div([
                             html.Iframe(
                                 id='line',
-                                style={'width': "400px", 'height': "320px"}
+                                style={'width': "420px", 'height': "320px", 'border': "1px solid gold"}
                             )
                         ])
                     ]),
@@ -216,9 +257,12 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.Div([
-                        html.H6(
-                            "Top 15 Actors from the best rated movies",
-                            style={'width': "500px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                        html.H6(children=[
+                            "Top ",
+                            html.Div(id='top_n_val', style={'display': 'inline'}),
+                            " Actors from the best rated movies"
+                        ],
+                            style={'width': "340px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                         ),
                     ])
                 ]),
@@ -226,7 +270,7 @@ app.layout = dbc.Container([
                     html.Div([
                         html.H6(
                             "Top rated movie in each region",
-                            style={'width': "500px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                            style={'width': "750px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                         ),
                     ])
                 ]),
@@ -236,7 +280,7 @@ app.layout = dbc.Container([
                     html.Div([
                         html.Iframe(
                             id='bar',
-                            style={'width': "500px", 'height': "400px"}
+                            style={'width': "340px", 'height': "350px", 'border': "1px solid gold"}
                         )
                     ])
                 ]),
@@ -244,7 +288,7 @@ app.layout = dbc.Container([
                     html.Div([
                         html.Iframe(
                             id='map',
-                            style={'width': "500px", 'height': "400px"}
+                            style={'width': "750px", 'height': "350px", 'border': "1px solid gold"}
                         )
                     ])
                 ])
@@ -259,11 +303,13 @@ app.layout = dbc.Container([
 @app.callback(
     Output("filtered-data", "data"),
     Input("genres-checklist", "value"),
-    Input("region-checklist", "value")
+    Input("region-checklist", "value"),
+    Input("years-range", "value")
 )
-def update_data(genres: list, regions: list):
+def update_data(genres: list, regions: list, years: list):
     filtered_data = data[data.genres.isin(genres)]
     filtered_data = filtered_data[filtered_data.region.isin(regions)]
+    filtered_data = filtered_data[(filtered_data.startYear >= years[0]) & (filtered_data.startYear <= years[1])]
     return filtered_data.to_json()
 
 # Box Plot
@@ -300,12 +346,60 @@ def serve_map(df):
 # Bar Chart
 @app.callback(
     Output('bar', 'srcDoc'),
+    Input('filtered-data', 'data'),
+    Input('top_n', 'value')
+)
+def serve_bar_chart(df, top_n):
+    df = pd.read_json(df)  # Convert the filtered data from a json string to a df
+    chart = generate_bar_chart(df, top_n)
+    return chart
+
+@app.callback(
+    Output('top_n_val', 'children'),
+    Input('top_n', 'value')
+)
+def update_ticker_header(top_n_val):
+    return [f'{top_n_val}']
+
+# Total Movies
+@app.callback(
+    Output('total_movies', 'children'),
     Input('filtered-data', 'data')
 )
-def serve_bar_chart(df):
+def total_movies_count(df):
     df = pd.read_json(df)  # Convert the filtered data from a json string to a df
-    chart = generate_bar_chart(df)
-    return chart
+    movies = df["primaryTitle"].nunique()
+    return movies
+
+# Total Actors
+@app.callback(
+    Output('total_actors', 'children'),
+    Input('filtered-data', 'data')
+)
+def total_movies_count(df):
+    df = pd.read_json(df)  # Convert the filtered data from a json string to a df
+    actors = df["primaryName"].nunique()
+    return actors
+
+# Average Runtime
+@app.callback(
+    Output('avg_runtime', 'children'),
+    Input('filtered-data', 'data')
+)
+def total_movies_count(df):
+    df = pd.read_json(df)  # Convert the filtered data from a json string to a df
+    avg_runtime = df["runtimeMinutes"].mean().round(0)
+    return avg_runtime
+
+# Average Rating
+@app.callback(
+    Output('avg_rating', 'children'),
+    Input('filtered-data', 'data')
+)
+def total_movies_count(df):
+    df = pd.read_json(df)  # Convert the filtered data from a json string to a df
+    avg_rating = df["averageRating"].mean().round(1)
+    return avg_rating
 
 if __name__ == '__main__':
     app.run_server(debug=True)

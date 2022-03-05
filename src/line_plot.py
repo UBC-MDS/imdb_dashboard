@@ -44,6 +44,9 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
                                           legendX=20,
                                           legendY=240,
                                           direction='horizontal')),
+        tooltip=[alt.Tooltip('genres', title="Genre"),
+                 alt.Tooltip('startYear', format=".0f" , title="Year"),
+                 alt.Tooltip(ycol, format=".1f" , title=label)]
     )
     
     chart = chart + chart.mark_circle()
