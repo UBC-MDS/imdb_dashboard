@@ -26,7 +26,7 @@ app.layout = dbc.Container([
     # First row containing only the title
     dbc.Row([
         dbc.Col([
-            html.H1("IMDB Dashboard", style={'color': "#DBA506"}),
+            html.H1("IMDb Dashboard", style={'color': "#DBA506"}),
         ])
     ]),
 
