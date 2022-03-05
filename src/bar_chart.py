@@ -1,7 +1,7 @@
 import pandas as pd
 import altair as alt
 
-def generate_bar_chart(data, top=15):
+def generate_bar_chart(data, top):
     """
     Generate the horizontal bar chart to show top actors in the top rated movies.
 
@@ -85,4 +85,5 @@ def generate_bar_chart(data, top=15):
                 height=300,
                 width=170,
                 background='#222222'
+            ).interactive(
             ).to_html()
