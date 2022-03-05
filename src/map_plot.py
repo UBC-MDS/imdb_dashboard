@@ -34,11 +34,18 @@ def generate_map(df: pd.DataFrame):
         lookup="id",
         from_=alt.LookupData(df, "country_code", ["averageRating", "primaryTitle", "fill"])
     ).encode(
-        tooltip=alt.Tooltip(["averageRating:Q", "primaryTitle:N"]),
-        color=alt.Color("fill:N", scale=alt.Scale(
-            domain=[None, 1],
-            range=["black", "gold"]
-        ), legend=None)
+        tooltip=[alt.Tooltip('averageRating:O', title="Average Rating"),
+                 alt.Tooltip('primaryTitle:N', title="Title")],
+        color=alt.Color("fill:N",
+                        scale=alt.Scale(domain=[None, 1],
+                                        range=["black", "gold"]),
+                        legend=None)
     ).project(type="equalEarth").configure(background='#222222')
 
-    return map.to_html()
+    return map.configure_view(
+                strokeWidth=0
+            ).properties(
+                height=300,
+                width=660,
+                background='#222222'
+            ).to_html()
