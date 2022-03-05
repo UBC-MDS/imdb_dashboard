@@ -1,17 +1,18 @@
-
-from boxplot import generate_box_plot
-from line_plot import generate_line_plot
-from bar_chart import generate_bar_chart
-from map_plot import generate_map
 from dash import Dash, html, dcc, Input, Output
 import altair as alt
 import dash_bootstrap_components as dbc
 import pandas as pd
 
+import sys
+sys.path.append("/app/")
+from .boxplot import generate_box_plot
+from .line_plot import generate_line_plot
+from .bar_chart import generate_bar_chart
+from .map_plot import generate_map
 
-alt.data_transformers.enable("data_server")
-data = pd.read_csv("data/imdb_2011-2020.csv")
-country_codes = pd.read_csv("data/country_codes.csv")
+alt.data_transformers.disable_max_rows()
+data = pd.read_csv("/app/data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("/app/data/country_codes.csv")
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
