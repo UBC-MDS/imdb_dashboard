@@ -5,20 +5,21 @@ import pandas as pd
 
 import sys
 sys.path.append("/app/")
-from .boxplot import generate_box_plot
-from .line_plot import generate_line_plot
-from .bar_chart import generate_bar_chart
-from .map_plot import generate_map
+from boxplot import generate_box_plot
+from line_plot import generate_line_plot
+from bar_chart import generate_bar_chart
+from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_csv("/app/data/imdb_2011-2020.csv")
-country_codes = pd.read_csv("/app/data/country_codes.csv")
+data = pd.read_csv("data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
 app = Dash(external_stylesheets=[dbc.themes.DARKLY])
+app.title = "IMDB Dashboard"
 server = app.server
 app.layout = dbc.Container([
     dcc.Store(id="filtered-data"),  # Used to store the data as it is filtered
