@@ -12,6 +12,14 @@ Usage examples:
 - Select region from the navigation pane on the left-hand side to filter the plots by region.
 - Hover over the selected region on the map to view top rated movie of the region.
 
+### Running the app locally
+
+To run the app locally using docker, run the following command:
+
+```bash
+docker-compose up
+```
+
 ## Dashboard description
 
 Our dashboard consists of one web page that shows overall summary and 4 main reactive plots:
