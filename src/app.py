@@ -19,6 +19,7 @@ data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
 app = Dash(external_stylesheets=[dbc.themes.DARKLY])
+app.title = "IMDB Dashboard"
 server = app.server
 app.layout = dbc.Container([
     dcc.Store(id="filtered-data"),  # Used to store the data as it is filtered
