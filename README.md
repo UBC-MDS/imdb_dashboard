@@ -14,7 +14,21 @@ Usage examples:
 
 ### Running the app locally
 
-To run the app locally using docker, run the following command:
+To run the app locally using docker, first change the following lines in `src/app.py`:
+
+```python
+data = pd.read_csv("/app/data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("/app/data/country_codes.csv")
+```
+
+to this:
+
+```python
+data = pd.read_csv("data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("data/country_codes.csv")
+```
+
+Then, run the following command:
 
 ```bash
 docker-compose up
