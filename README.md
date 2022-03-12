@@ -12,6 +12,28 @@ Usage examples:
 - Select region from the navigation pane on the left-hand side to filter the plots by region.
 - Hover over the selected region on the map to view top rated movie of the region.
 
+### Running the app locally
+
+To run the app locally using docker, first change the following lines in `src/app.py`:
+
+```python
+data = pd.read_csv("/app/data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("/app/data/country_codes.csv")
+```
+
+to this:
+
+```python
+data = pd.read_csv("data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("data/country_codes.csv")
+```
+
+Then, run the following command:
+
+```bash
+docker-compose up
+```
+
 ## Dashboard description
 
 Our dashboard consists of one web page that shows overall summary and 4 main reactive plots:
