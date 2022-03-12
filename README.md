@@ -74,17 +74,6 @@ Additionally, the filters in the navigation pane on the left-hand side allows us
 
 We welcome and recognize all contributions. Please find the guide for contribution in [Contributing Document](https://github.com/UBC-MDS/imdb_dashboard/blob/main/CONTRIBUTING.md).
 
-## Installation
-To run the app locally:
-1. Install the necessary packages listed in `requirements.txt` using `pip` or `conda`
-2. Clone this repo 
-3. Navigate to the root of this repo
-4. In the command line, enter
-```
-python src/app.py
-```
-5. Copy and paste http://127.0.0.1:8050/ to a browser to run the Dash app.
-
 ## License
 
 `imdb_dashboard` was created by Abdul Moid Mohammed, Brandon Lam and Nikita Shymberg. It is licensed under the terms of the MIT license.
