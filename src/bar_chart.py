@@ -30,7 +30,12 @@ def generate_bar_chart(data, top):
     actors = pd.DataFrame.from_dict(actors)
     actors = actors.reset_index()
     actors.columns = [y, x]
-    actors
+
+    actors = (data[
+        data.primaryName.isin(actors.primaryName)
+        ][["primaryName", "averageRating", "primaryTitle"]]
+        .sort_values("averageRating", ascending=False)
+        .head(top))
 
     chart = alt.Chart(
         data=actors
@@ -46,7 +51,8 @@ def generate_bar_chart(data, top):
         color=alt.Color(x,
                         scale=alt.Scale(scheme="darkgold",
                                         domain=[15, 3]),
-                        legend=None)
+                        legend=None),
+        tooltip=[alt.Tooltip('primaryTitle', title="Top Movie")]
     ).mark_bar(
     )
 
