@@ -5,15 +5,15 @@ import pandas as pd
 
 import sys
 sys.path.append("/app/")
-from .boxplot import generate_box_plot
-from .line_plot import generate_line_plot
-from .bar_chart import generate_bar_chart
-from .map_plot import generate_map
+from boxplot import generate_box_plot
+from line_plot import generate_line_plot
+from bar_chart import generate_bar_chart
+from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_csv("/app/data/imdb_2011-2020.csv")
-country_codes = pd.read_csv("/app/data/country_codes.csv")
+data = pd.read_csv("data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
@@ -60,14 +60,14 @@ app.layout = dbc.Container([
                 dcc.Dropdown(
                     id="region-checklist",
                     options=[
-                        {"label": region, "value": region} for region in sorted(
-                            data.region.unique().astype(str)
-                            ) if region != "nan"
+                        {"label": name, "value": name} for name in sorted(
+                            data.name.unique().astype(str)
+                            ) if name != "nan"
                         ],
                     multi=True,
                     clearable=False,
                     placeholder="Select Region(s)",
-                    value=["US", "IN", "UK"],
+                    value=["United States of America", "India"],
                     style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
                 ),
                 html.Br(),
@@ -310,7 +310,7 @@ app.layout = dbc.Container([
 )
 def update_data(genres: list, regions: list, years: list):
     filtered_data = data[data.genres.isin(genres)]
-    filtered_data = filtered_data[filtered_data.region.isin(regions)]
+    filtered_data = filtered_data[filtered_data.name.isin(regions)]
     filtered_data = filtered_data[(filtered_data.startYear >= years[0]) & (filtered_data.startYear <= years[1])]
     return filtered_data.to_json()
 
@@ -342,6 +342,7 @@ def serve_line_plot(df, ycol):
 )
 def serve_map(df):
     df = pd.read_json(df)  # Convert the filtered data from a json string to a df
+    print(df.name)
     chart = generate_map(df)  # TODO: the map shouldn't receive filtered data!!
     return chart
 
