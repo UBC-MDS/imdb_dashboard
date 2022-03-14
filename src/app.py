@@ -52,24 +52,6 @@ app.layout = dbc.Container([
                     style={'width': "150px", 'height': "100%"}
                 ),
                 html.Br(),
-                # Region dropdown
-                html.H6(
-                    "Select Region(s):",
-                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                ),
-                dcc.Dropdown(
-                    id="region-checklist",
-                    options=[
-                        {"label": name, "value": name} for name in sorted(
-                            data.name.unique().astype(str)
-                            ) if name != "nan"
-                        ],
-                    multi=True,
-                    clearable=False,
-                    placeholder="Select Region(s)",
-                    value=["United States of America", "India"],
-                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
-                ),
                 html.Br(),
                 # Top N actors
                 html.H6(
@@ -104,7 +86,25 @@ app.layout = dbc.Container([
                     value=[2011, 2020],
                     dots=True,
                     tooltip={"placement": "bottom", "always_visible": False}
-                )
+                ),
+                # Region dropdown
+                html.H6(
+                    "Select Region(s):",
+                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                ),
+                dcc.Dropdown(
+                    id="region-checklist",
+                    options=[
+                        {"label": name, "value": name} for name in sorted(
+                            data.name.unique().astype(str)
+                            ) if name != "nan"
+                        ],
+                    multi=True,
+                    clearable=False,
+                    placeholder="Select Region(s)",
+                    value=["United States of America", "India"],
+                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
+                ),
             ])
         ],
         width="auto"
