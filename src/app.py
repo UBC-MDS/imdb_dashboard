@@ -5,15 +5,15 @@ import pandas as pd
 
 import sys
 sys.path.append("/app/")
-from .boxplot import generate_box_plot
-from .line_plot import generate_line_plot
-from .bar_chart import generate_bar_chart
-from .map_plot import generate_map
+from boxplot import generate_box_plot
+from line_plot import generate_line_plot
+from bar_chart import generate_bar_chart
+from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_csv("/app/data/imdb_2011-2020.csv")
-country_codes = pd.read_csv("/app/data/country_codes.csv")
+data = pd.read_csv("data/imdb_2011-2020.csv")
+country_codes = pd.read_csv("data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
@@ -228,7 +228,10 @@ app.layout = dbc.Container([
                     dbc.Row([
                         html.Div([
                             html.H6(
-                                "Average Rating by Genre over Time",
+                                children=[
+                                    html.Div(id='ycol_title', style={'display': 'inline'}),
+                                    " by Genre over Time"
+                                ],
                                 style={'width': "420px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                             )
                         ])
@@ -277,11 +280,12 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.Div([
-                        html.H6(children=[
-                            "Top ",
-                            html.Div(id='top_n_val', style={'display': 'inline'}),
-                            " Actors from the best rated movies"
-                        ],
+                        html.H6(
+                            children=[
+                                "Top ",
+                                html.Div(id='top_n_val', style={'display': 'inline'}),
+                                " Actors from the best rated movies"
+                            ],
                             style={'width': "340px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                         ),
                     ])
@@ -381,12 +385,26 @@ def serve_bar_chart(df, top_n):
     chart = generate_bar_chart(df, top_n)
     return chart
 
+# Top N Value
 @app.callback(
     Output('top_n_val', 'children'),
     Input('top_n', 'value')
 )
 def update_ticker_header(top_n_val):
     return [f'{top_n_val}']
+
+# Line Chart Title
+@app.callback(
+    Output('ycol_title', 'children'),
+    Input('ycol', 'value')
+)
+def update_ycol_title(ycol):
+    # Set up dynamic axis labels
+    if ycol == "averageRating":
+        label = "Average Rating (/10)"
+    if ycol == "runtimeMinutes":
+        label = "Average Runtime (minutes)"
+    return label
 
 # Total Movies
 @app.callback(
