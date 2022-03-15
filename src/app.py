@@ -12,8 +12,8 @@ from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_csv("data/imdb_2011-2020.csv")
-country_codes = pd.read_csv("data/country_codes.csv")
+data = pd.read_feather("../data/imdb_2011-2020.feather")
+country_codes = pd.read_csv("../data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
@@ -124,9 +124,12 @@ app.layout = dbc.Container([
                     ]),
                     dbc.Row([
                         html.Div([
-                            html.H2(
-                                children=[html.Div(id='total_movies', style={'display': 'inline'})],
-                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                            dcc.Loading(
+                                type="circle",
+                                children=html.H2(
+                                    children=[html.Div(id='total_movies', style={'display': 'inline'})],
+                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                                )
                             )
                         ]),
                     ]),
@@ -141,9 +144,12 @@ app.layout = dbc.Container([
                     ]),
                     dbc.Row([
                         html.Div([
-                            html.H2(
-                                children=[html.Div(id='total_actors', style={'display': 'inline'})],
-                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                            dcc.Loading(
+                                type="circle",
+                                children=html.H2(
+                                    children=[html.Div(id='total_actors', style={'display': 'inline'})],
+                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                                )
                             )
                         ])
                     ]),
@@ -158,12 +164,15 @@ app.layout = dbc.Container([
                     ]),
                     dbc.Row([
                         html.Div([
-                            html.H2(
-                                children=[
-                                    html.Div(id='avg_runtime', style={'display': 'inline'}),
-                                    html.Div("mins", style={'display': 'inline', 'font-size': "15px"})
-                                ],
-                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                            dcc.Loading(
+                                type="circle",
+                                children=html.H2(
+                                    children=[
+                                        html.Div(id='avg_runtime', style={'display': 'inline'}),
+                                        html.Div("mins", style={'display': 'inline', 'font-size': "15px"})
+                                    ],
+                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                                )
                             )
                         ])
                     ]),
@@ -178,9 +187,12 @@ app.layout = dbc.Container([
                     ]),
                     dbc.Row([
                         html.Div([
-                            html.H2(
-                                children=[html.Div(id='avg_rating', style={'display': 'inline'})],
-                                style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                            dcc.Loading(
+                                type="circle",
+                                children=html.H2(
+                                    children=[html.Div(id='avg_rating', style={'display': 'inline'})],
+                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
+                                )
                             )
                         ])
                     ])  
@@ -199,9 +211,12 @@ app.layout = dbc.Container([
                     ]),
                     dbc.Row([
                         html.Div([
-                            html.Iframe(
-                                id='box',
-                                style={'width': "500px", 'height': "350px", 'border': "1px solid gold"}
+                            dcc.Loading(
+                                type="circle",
+                                children=html.Iframe(
+                                    id='box',
+                                    style={'width': "500px", 'height': "350px", 'border': "1px solid gold"}
+                                )
                             )
                         ])
                     ])
@@ -220,9 +235,12 @@ app.layout = dbc.Container([
                     ]),
                     dbc.Row([
                         html.Div([
-                            html.Iframe(
-                                id='line',
-                                style={'width': "420px", 'height': "320px", 'border': "1px solid gold"}
+                            dcc.Loading(
+                                type="circle",
+                                children=html.Iframe(
+                                    id='line',
+                                    style={'width': "420px", 'height': "320px", 'border': "1px solid gold"}
+                                )
                             )
                         ])
                     ]),
@@ -280,17 +298,24 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.Div([
-                        html.Iframe(
-                            id='bar',
-                            style={'width': "340px", 'height': "350px", 'border': "1px solid gold"}
+                        dcc.Loading(
+                            type="circle",
+                            children=html.Iframe(
+                                id='bar',
+                                style={'width': "340px", 'height': "350px", 'border': "1px solid gold"}
+                            )
                         )
                     ])
                 ]),
                 dbc.Col([
                     html.Div([
-                        html.Iframe(
-                            id='map',
-                            style={'width': "750px", 'height': "350px", 'border': "1px solid gold"}
+                        dcc.Loading(
+                            type="circle",
+                            color="#DBA506",
+                            children=html.Iframe(
+                                id='map',
+                                style={'width': "750px", 'height': "350px", 'border': "1px solid gold"}
+                            )
                         )
                     ])
                 ])
