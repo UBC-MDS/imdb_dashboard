@@ -22,10 +22,11 @@ def generate_box_plot(data: pd.DataFrame):
     data = data.drop_duplicates()
     
     # Create Boxplot
-    chart = alt.Chart(data).mark_boxplot(size=25).encode(
+    chart = alt.Chart(data).mark_boxplot(size=25, color="gold").encode(
         x=alt.X('genres',
                 axis=alt.Axis(title="Genre", labelAngle=-45)),
-        y=alt.Y('averageRating', title="IMDb Rating"),
+        y=alt.Y('averageRating',
+                title="IMDb Rating"),
         color=alt.Color('genres',
                         title="Genre")
     )
