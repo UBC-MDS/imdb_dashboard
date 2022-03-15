@@ -5,15 +5,15 @@ import pandas as pd
 
 import sys
 sys.path.append("/app/")
-from .boxplot import generate_box_plot
-from .line_plot import generate_line_plot
-from .bar_chart import generate_bar_chart
-from .map_plot import generate_map
+from boxplot import generate_box_plot
+from line_plot import generate_line_plot
+from bar_chart import generate_bar_chart
+from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_csv("/app/data/imdb_2011-2020.csv")
-country_codes = pd.read_csv("/app/data/country_codes.csv")
+data = pd.read_feather("../data/imdb_2011-2020.feather")
+country_codes = pd.read_csv("../data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
