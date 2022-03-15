@@ -12,8 +12,8 @@ from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_feather("../data/imdb_2011-2020.feather")
-country_codes = pd.read_csv("../data/country_codes.csv")
+data = pd.read_feather("data/imdb_2011-2020.feather")
+country_codes = pd.read_csv("data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
@@ -27,10 +27,20 @@ app.layout = dbc.Container([
     # First row containing only the title
     dbc.Row([
         dbc.Col([
-            html.H1("IMDb Dashboard", style={'color': "#DBA506"}),
+            html.Div([
+                html.Div(
+                    "IMDb Dashboard",
+                    style={'font-size': 50, 'display': "inline", 'color': "#DBA506"}
+                ),
+                html.Div("Plan your next movie.",
+                    style={'font-size': 20, 'display': "flex", 'position': "absolute", 'top': "40px", 'right': "0px", 'color': "#F2DB83"}
+                )
+            ],
+            style={'margin-bottom': "3px", 'position': "relative", 'border-bottom': "6px solid gold"}
+            )
         ])
     ]),
-
+    
     # Second row containing filters towards left and charts toward right
     dbc.Row([
         # First column containing filters separated by dividers
