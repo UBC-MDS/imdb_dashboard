@@ -90,6 +90,6 @@ def generate_bar_chart(data, top):
             ).properties(
                 height=300,
                 width=170,
-                background='#222222'
+                background='#000000'
             ).interactive(
             ).to_html()

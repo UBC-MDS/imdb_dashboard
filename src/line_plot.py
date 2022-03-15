@@ -67,5 +67,5 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
             ).properties(
                 height=200,
                 width=315,
-                background='#222222'
+                background='#000000'
             ).to_html()

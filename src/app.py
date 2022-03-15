@@ -18,7 +18,7 @@ country_codes = pd.read_csv("data/country_codes.csv")
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
-app = Dash(external_stylesheets=[dbc.themes.DARKLY])
+app = Dash(external_stylesheets=[dbc.themes.CYBORG])
 app.title = "IMDB Dashboard"
 server = app.server
 app.layout = dbc.Container([
@@ -40,7 +40,7 @@ app.layout = dbc.Container([
             )
         ])
     ]),
-    
+
     # Second row containing filters towards left and charts toward right
     dbc.Row([
         # First column containing filters separated by dividers
@@ -78,7 +78,7 @@ app.layout = dbc.Container([
                     clearable=False,
                     placeholder="Select Region(s)",
                     value=["US", "IN", "UK"],
-                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
+                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#000000"}
                 ),
                 html.Br(),
                 # Top N actors

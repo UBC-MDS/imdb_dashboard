@@ -46,5 +46,5 @@ def generate_box_plot(data: pd.DataFrame):
             ).properties(
                 height=250,
                 width=315,
-                background='#222222'
+                background='#000000'
             ).to_html()
