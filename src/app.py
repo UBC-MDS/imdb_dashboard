@@ -18,7 +18,7 @@ country_codes = pd.read_csv("data/country_codes.csv")
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
-app = Dash(external_stylesheets=[dbc.themes.DARKLY])
+app = Dash(external_stylesheets=[dbc.themes.CYBORG])
 app.title = "IMDB Dashboard"
 server = app.server
 app.layout = dbc.Container([
@@ -27,7 +27,17 @@ app.layout = dbc.Container([
     # First row containing only the title
     dbc.Row([
         dbc.Col([
-            html.H1("IMDb Dashboard", style={'color': "#DBA506"}),
+            html.Div([
+                html.Div(
+                    "IMDb Dashboard",
+                    style={'font-size': 50, 'display': "inline", 'color': "#DBA506"}
+                ),
+                html.Div("Plan your next movie.",
+                    style={'font-size': 20, 'display': "flex", 'position': "absolute", 'top': "40px", 'right': "0px", 'color': "#F2DB83"}
+                )
+            ],
+            style={'margin-bottom': "3px", 'position': "relative", 'border-bottom': "6px solid gold"}
+            )
         ])
     ]),
 
@@ -52,6 +62,24 @@ app.layout = dbc.Container([
                     style={'width': "150px", 'height': "100%"}
                 ),
                 html.Br(),
+                # Region dropdown
+                html.H6(
+                    "Select Region(s):",
+                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                ),
+                dcc.Dropdown(
+                    id="region-checklist",
+                    options=[
+                        {"label": region, "value": region} for region in sorted(
+                            data.region.unique().astype(str)
+                            ) if region != "nan"
+                        ],
+                    multi=True,
+                    clearable=False,
+                    placeholder="Select Region(s)",
+                    value=["US", "IN", "UK"],
+                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#000000"}
+                ),
                 html.Br(),
                 # Top N actors
                 html.H6(
@@ -205,17 +233,17 @@ app.layout = dbc.Container([
                         html.Div([
                             html.H6(
                                 "Distribution of movies by Genre",
-                                style={'width': "500px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "450px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                             )
                         ])
                     ]),
                     dbc.Row([
                         html.Div([
                             dcc.Loading(
-                                type="circle",
+                                type="graph",
                                 children=html.Iframe(
                                     id='box',
-                                    style={'width': "500px", 'height': "350px", 'border': "1px solid gold"}
+                                    style={'width': "450px", 'height': "350px", 'border': "1px solid gold"}
                                 )
                             )
                         ])
@@ -228,18 +256,21 @@ app.layout = dbc.Container([
                     dbc.Row([
                         html.Div([
                             html.H6(
-                                "Average Rating by Genre over Time",
-                                style={'width': "420px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                children=[
+                                    html.Div(id='ycol_title', style={'display': 'inline'}),
+                                    " by Genre over Time"
+                                ],
+                                style={'width': "474px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                             )
                         ])
                     ]),
                     dbc.Row([
                         html.Div([
                             dcc.Loading(
-                                type="circle",
+                                type="graph",
                                 children=html.Iframe(
                                     id='line',
-                                    style={'width': "420px", 'height': "320px", 'border': "1px solid gold"}
+                                    style={'width': "474px", 'height': "320px", 'border': "1px solid gold"}
                                 )
                             )
                         ])
@@ -249,7 +280,7 @@ app.layout = dbc.Container([
                         dbc.Col([
                             html.H6(
                                 "Select Y-axis:",
-                                style={'width': "100px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "130px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                                 ),
                         ],
                         width="auto"
@@ -257,7 +288,7 @@ app.layout = dbc.Container([
                         dbc.Col([
                             dcc.RadioItems(
                                 id='ycol',
-                                style={'width': "300px", 'height': "20px"},
+                                style={'width': "310px", 'height': "20px"},
                                 value='averageRating',
                                 inline=True,
                                 inputStyle={'margin-right': "10px", 'margin-left': "10px"},
@@ -277,11 +308,12 @@ app.layout = dbc.Container([
             dbc.Row([
                 dbc.Col([
                     html.Div([
-                        html.H6(children=[
-                            "Top ",
-                            html.Div(id='top_n_val', style={'display': 'inline'}),
-                            " Actors from the best rated movies"
-                        ],
+                        html.H6(
+                            children=[
+                                "Top ",
+                                html.Div(id='top_n_val', style={'display': 'inline'}),
+                                " Actors from the best rated movies"
+                            ],
                             style={'width': "340px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                         ),
                     ])
@@ -299,7 +331,7 @@ app.layout = dbc.Container([
                 dbc.Col([
                     html.Div([
                         dcc.Loading(
-                            type="circle",
+                            type="graph",
                             children=html.Iframe(
                                 id='bar',
                                 style={'width': "340px", 'height': "350px", 'border': "1px solid gold"}
@@ -310,7 +342,7 @@ app.layout = dbc.Container([
                 dbc.Col([
                     html.Div([
                         dcc.Loading(
-                            type="circle",
+                            type="graph",
                             color="#DBA506",
                             children=html.Iframe(
                                 id='map',
@@ -381,12 +413,26 @@ def serve_bar_chart(df, top_n):
     chart = generate_bar_chart(df, top_n)
     return chart
 
+# Top N Value
 @app.callback(
     Output('top_n_val', 'children'),
     Input('top_n', 'value')
 )
 def update_ticker_header(top_n_val):
     return [f'{top_n_val}']
+
+# Line Chart Title
+@app.callback(
+    Output('ycol_title', 'children'),
+    Input('ycol', 'value')
+)
+def update_ycol_title(ycol):
+    # Set up dynamic axis labels
+    if ycol == "averageRating":
+        label = "Average Rating"
+    if ycol == "runtimeMinutes":
+        label = "Average Runtime"
+    return label
 
 # Total Movies
 @app.callback(

@@ -38,14 +38,14 @@ def generate_map(df: pd.DataFrame):
                  alt.Tooltip('primaryTitle:N', title="Title")],
         color=alt.Color("fill:N",
                         scale=alt.Scale(domain=[None, 1],
-                                        range=["black", "gold"]),
+                                        range=["dimgray", "gold"]),
                         legend=None)
-    ).project(type="equalEarth").configure(background='#222222')
+    ).project(type="equalEarth").configure(background='#000000')
 
     return map.configure_view(
                 strokeWidth=0
             ).properties(
                 height=300,
                 width=660,
-                background='#222222'
+                background='#000000'
             ).to_html()
