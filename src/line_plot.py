@@ -31,7 +31,7 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
 
     chart = alt.Chart(data).mark_line().encode(
         x=alt.X("startYear",
-                axis=alt.Axis(title="Year",
+                axis=alt.Axis(title="",
                               grid=False,
                               format='.0f'),
                 scale=alt.Scale(domain=(2011, 2020))),
@@ -42,7 +42,7 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
                                           orient='none',
                                           columns=5,
                                           legendX=20,
-                                          legendY=240,
+                                          legendY=250,
                                           direction='horizontal')),
         tooltip=[alt.Tooltip('genres', title="Genre"),
                  alt.Tooltip('startYear', format=".0f" , title="Year"),
@@ -65,7 +65,7 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
                 labelColor='#DBA506',
                 titleColor='#DBA506'
             ).properties(
-                height=200,
-                width=315,
+                height=220,
+                width=350,
                 background='#000000'
             ).to_html()

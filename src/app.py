@@ -215,17 +215,17 @@ app.layout = dbc.Container([
                         html.Div([
                             html.H6(
                                 "Distribution of movies by Genre",
-                                style={'width': "500px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "450px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                             )
                         ])
                     ]),
                     dbc.Row([
                         html.Div([
                             dcc.Loading(
-                                type="circle",
+                                type="graph",
                                 children=html.Iframe(
                                     id='box',
-                                    style={'width': "500px", 'height': "350px", 'border': "1px solid gold"}
+                                    style={'width': "450px", 'height': "350px", 'border': "1px solid gold"}
                                 )
                             )
                         ])
@@ -242,17 +242,17 @@ app.layout = dbc.Container([
                                     html.Div(id='ycol_title', style={'display': 'inline'}),
                                     " by Genre over Time"
                                 ],
-                                style={'width': "420px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "474px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                             )
                         ])
                     ]),
                     dbc.Row([
                         html.Div([
                             dcc.Loading(
-                                type="circle",
+                                type="graph",
                                 children=html.Iframe(
                                     id='line',
-                                    style={'width': "420px", 'height': "320px", 'border': "1px solid gold"}
+                                    style={'width': "474px", 'height': "320px", 'border': "1px solid gold"}
                                 )
                             )
                         ])
@@ -262,7 +262,7 @@ app.layout = dbc.Container([
                         dbc.Col([
                             html.H6(
                                 "Select Y-axis:",
-                                style={'width': "100px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "130px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                                 ),
                         ],
                         width="auto"
@@ -270,7 +270,7 @@ app.layout = dbc.Container([
                         dbc.Col([
                             dcc.RadioItems(
                                 id='ycol',
-                                style={'width': "300px", 'height': "20px"},
+                                style={'width': "310px", 'height': "20px"},
                                 value='averageRating',
                                 inline=True,
                                 inputStyle={'margin-right': "10px", 'margin-left': "10px"},
@@ -313,7 +313,7 @@ app.layout = dbc.Container([
                 dbc.Col([
                     html.Div([
                         dcc.Loading(
-                            type="circle",
+                            type="graph",
                             children=html.Iframe(
                                 id='bar',
                                 style={'width': "340px", 'height': "350px", 'border': "1px solid gold"}
@@ -324,7 +324,7 @@ app.layout = dbc.Container([
                 dbc.Col([
                     html.Div([
                         dcc.Loading(
-                            type="circle",
+                            type="graph",
                             color="#DBA506",
                             children=html.Iframe(
                                 id='map',

@@ -24,7 +24,7 @@ def generate_box_plot(data: pd.DataFrame):
     # Create Boxplot
     chart = alt.Chart(data).mark_boxplot(size=25, color="gold").encode(
         x=alt.X('genres',
-                axis=alt.Axis(title="Genre", labelAngle=-45)),
+                axis=alt.Axis(title="", labelAngle=-45)),
         y=alt.Y('averageRating',
                 title="IMDb Rating"),
         color=alt.Color('genres',
@@ -46,6 +46,6 @@ def generate_box_plot(data: pd.DataFrame):
                 titleColor='#DBA506'
             ).properties(
                 height=250,
-                width=315,
+                width=250,
                 background='#000000'
             ).to_html()
