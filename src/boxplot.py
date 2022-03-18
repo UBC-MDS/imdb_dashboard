@@ -1,6 +1,6 @@
 import altair as alt
 import pandas as pd
-from constants import genre_color_map
+from .constants import genre_color_map
 
 
 
