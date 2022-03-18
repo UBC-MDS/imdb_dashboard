@@ -67,19 +67,6 @@ app.layout = dbc.Container([
                     "Select Region(s):",
                     style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
-                dcc.Dropdown(
-                    id="region-checklist",
-                    options=[
-                        {"label": region, "value": region} for region in sorted(
-                            data.region.unique().astype(str)
-                            ) if region != "nan"
-                        ],
-                    multi=True,
-                    clearable=False,
-                    placeholder="Select Region(s)",
-                    value=["US", "IN", "UK"],
-                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#000000"}
-                ),
                 html.Br(),
                 # Top N actors
                 html.H6(
@@ -114,7 +101,25 @@ app.layout = dbc.Container([
                     value=[2011, 2020],
                     dots=True,
                     tooltip={"placement": "bottom", "always_visible": False}
-                )
+                ),
+                # Region dropdown
+                html.H6(
+                    "Select Region(s):",
+                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                ),
+                dcc.Dropdown(
+                    id="region-checklist",
+                    options=[
+                        {"label": name, "value": name} for name in sorted(
+                            data.name.unique().astype(str)
+                            ) if name != "nan"
+                        ],
+                    multi=True,
+                    clearable=False,
+                    placeholder="Select Region(s)",
+                    value=["United States of America", "India"],
+                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
+                ),
             ])
         ],
         width="auto"
@@ -349,7 +354,7 @@ app.layout = dbc.Container([
 )
 def update_data(genres: list, regions: list, years: list):
     filtered_data = data[data.genres.isin(genres)]
-    filtered_data = filtered_data[filtered_data.region.isin(regions)]
+    filtered_data = filtered_data[filtered_data.name.isin(regions)]
     filtered_data = filtered_data[(filtered_data.startYear >= years[0]) & (filtered_data.startYear <= years[1])]
     return filtered_data.to_json()
 

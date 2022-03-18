@@ -1,6 +1,7 @@
 import altair as alt
 from numpy import row_stack
 import pandas as pd
+from constants import genre_color_map
 
 
 def generate_line_plot(data: pd.DataFrame, ycol: str):
@@ -29,6 +30,12 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
     
     ycol = f"mean({ycol})"
 
+    # Filter the colours for the legend
+    genre_names = data.genres.unique()
+    genre_colors = []
+    for genre in genre_names:
+        genre_colors.append(genre_color_map[genre])
+
     chart = alt.Chart(data).mark_line().encode(
         x=alt.X("startYear",
                 axis=alt.Axis(title="",
@@ -38,6 +45,10 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
         y=alt.Y(ycol,
                 axis=alt.Axis(title=label)),
         color=alt.Color("genres",
+                        scale=alt.Scale(
+                            domain=genre_names,
+                            range=genre_colors
+                        ),
                         legend=alt.Legend(title="",
                                           orient='none',
                                           columns=5,
