@@ -12,8 +12,8 @@ from map_plot import generate_map
 
 alt.data_transformers.disable_max_rows()
 alt.renderers.set_embed_options(actions=False)
-data = pd.read_feather("../data/imdb_2011-2020.feather")
-country_codes = pd.read_csv("../data/country_codes.csv")
+data = pd.read_feather("data/imdb_2011-2020.feather")
+country_codes = pd.read_csv("data/country_codes.csv")
 
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
@@ -367,7 +367,6 @@ def serve_line_plot(df, ycol):
 )
 def serve_map(df):
     df = pd.read_json(df)  # Convert the filtered data from a json string to a df
-    print(df.name)
     chart = generate_map(df)  # TODO: the map shouldn't receive filtered data!!
     return chart
 
