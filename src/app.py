@@ -411,9 +411,9 @@ def update_ticker_header(top_n_val):
 def update_ycol_title(ycol):
     # Set up dynamic axis labels
     if ycol == "averageRating":
-        label = "Average Rating (/10)"
+        label = "Average Rating"
     if ycol == "runtimeMinutes":
-        label = "Average Runtime (minutes)"
+        label = "Average Runtime"
     return label
 
 # Total Movies
