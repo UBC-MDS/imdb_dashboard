@@ -1,7 +1,7 @@
 import altair as alt
 from numpy import row_stack
 import pandas as pd
-from constants import genre_color_map
+from .constants import genre_color_map
 
 
 def generate_line_plot(data: pd.DataFrame, ycol: str):
