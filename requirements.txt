@@ -6,4 +6,3 @@ pandas
 plotly
 dash_bootstrap_components
 vega_datasets
-pyarrow
