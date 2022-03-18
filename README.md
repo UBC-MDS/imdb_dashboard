@@ -2,8 +2,6 @@
 
 The IMDb dashboard is primarily targeted towards movie producers to present a consolidated crisp view of the average ratings and runtime for movies by genres and regions with interactive abilities to help them choose and plan their next movie.
 
-<img src="dashboard_features.gif" width="100%" />
-
 ## Usage
 The link to the app is [here](https://imdbdashboardpy.herokuapp.com/)
 
@@ -11,6 +9,8 @@ Usage examples:
 - Select genre from the navigation pane on the left-hand side to filter the plots by genres.
 - Select region from the navigation pane on the left-hand side to filter the plots by region.
 - Hover over the selected region on the map to view top rated movie of the region.
+
+<img src="dashboard_features.gif" width="100%" />
 
 ### Running the app locally
 
