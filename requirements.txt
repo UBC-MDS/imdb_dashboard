@@ -7,4 +7,3 @@ plotly
 dash_bootstrap_components
 vega_datasets
 pyarrow
-cgitb==3.10.2
