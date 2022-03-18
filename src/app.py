@@ -67,19 +67,6 @@ app.layout = dbc.Container([
                     "Select Region(s):",
                     style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
-                dcc.Dropdown(
-                    id="region-checklist",
-                    options=[
-                        {"label": region, "value": region} for region in sorted(
-                            data.region.unique().astype(str)
-                            ) if region != "nan"
-                        ],
-                    multi=True,
-                    clearable=False,
-                    placeholder="Select Region(s)",
-                    value=["US", "IN", "UK"],
-                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#000000"}
-                ),
                 html.Br(),
                 # Top N actors
                 html.H6(
