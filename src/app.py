@@ -29,7 +29,7 @@ app.layout = dbc.Container([
     dbc.Row([
         dbc.Col([
             html.Img(
-                src=app.get_asset_url"projector.gif",
+                src=app.get_asset_url("projector.gif"),
                 id="projector",
                 style={'width': "120%"}
             )
@@ -48,7 +48,7 @@ app.layout = dbc.Container([
             html.Div([
                 html.I(
                     html.Img(
-                        src="/app/src/assets/info-64.png",
+                        src=app.get_asset_url("info-64.png"),
                         id="info",
                         style={'width': "100%", 'background': "#000000"}
                     ),
@@ -76,7 +76,7 @@ app.layout = dbc.Container([
         html.Div([
             # Reel image
             html.Img(
-                src=app.get_asset_url"reel.png",
+                src=app.get_asset_url("reel.png"),
                 id="reel",
                 style={'width': "100%", 'height': "200px", 'background': "#DBA506"}
             ),
