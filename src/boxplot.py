@@ -57,7 +57,7 @@ def generate_box_plot(data: pd.DataFrame):
                 labelColor='#DBA506',
                 titleColor='#DBA506'
             ).properties(
-                height=250,
-                width=250,
+                height=260,
+                width=350,
                 background='#000000'
             ).to_html()

@@ -77,6 +77,6 @@ def generate_line_plot(data: pd.DataFrame, ycol: str):
                 titleColor='#DBA506'
             ).properties(
                 height=220,
-                width=350,
+                width=430,
                 background='#000000'
             ).to_html()

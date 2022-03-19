@@ -46,6 +46,6 @@ def generate_map(df: pd.DataFrame):
                 strokeWidth=0
             ).properties(
                 height=300,
-                width=660,
+                width=640,
                 background='#000000'
             ).to_html()
