@@ -19,7 +19,7 @@ country_codes = pd.read_csv("/app/data/country_codes.csv")
 data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
-app = Dash(external_stylesheets=[dbc.themes.CYBORG])
+app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 app.title = "IMDb Dashboard"
 server = app.server
 app.layout = dbc.Container([
