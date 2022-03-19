@@ -1,5 +1,5 @@
 
-from dash import Dash, html, dcc, Input, Output
+from dash import Dash, html, dcc, Input, Output, State
 import altair as alt
 import dash_bootstrap_components as dbc
 import pandas as pd
@@ -42,14 +42,34 @@ app.layout = dbc.Container([
                     style={'font-size': 50, 'display': "inline", 'color': "#DBA506"}
                 ),
                 html.Div("Plan your next movie.",
-                    style={'font-size': 20, 'display': "flex", 'position': "absolute", 'top': 40, 'right': 5, 'color': "#F2DB83"}
+                    style={'font-size': 20, 'display': "flex", 'position': "absolute", 'top': 40, 'right': 30, 'color': "#F2DB83"}
+                )
+            ]),
+            html.Div([
+                html.I(
+                    html.Img(
+                        src="/app/src/assets/info-64.png",
+                        id="info",
+                        style={'width': "100%", 'background': "#000000"}
+                    ),
+                    id="collapse-button",
+                    n_clicks=0,
+                    style={'width': "2%", 'position': "absolute", 'top': 38, 'right': 3, 'color': "#DBA506", 'margin': 0}
+                ),
+                dbc.Collapse(
+                    dbc.Card(dbc.CardBody("The IMDb dashboard is primarily targeted towards movie producers to present a consolidated crisp view of the average ratings and runtime for movies by genres and regions with interactive abilities to help them choose and plan their next movie.")),
+                    id="collapse",
+                    is_open=False,
+                    style={'width': "100%", 'position': "absolute", 'top': 72, 'left': 0, 'zIndex': 999, 'color': "#DBA506", 'background': "#000000", 'border': "3px solid gold"},
                 )
             ])
         ],
         width=11,
         style={'position': "relative"}
         )
-    ]),
+    ],
+    style={'height': "70px"}
+    ),
 
     # Second row containing reel image and KPIs
     dbc.Row([
@@ -66,7 +86,7 @@ app.layout = dbc.Container([
                     html.Strong(
                         html.Div(
                             "Total Movies",
-                            style={'fontSize': 20, 'display': "inline-block", 'position': "absolute", 'top': 50, 'left': 110, 'textAlign': "center", 'color': "#000000"}
+                            style={'fontSize': 20, 'display': "inline-block", 'position': "absolute", 'top': 50, 'left': "9.5%", 'textAlign': "center", 'color': "#000000"}
                         )
                     ),
                     html.Div(
@@ -75,7 +95,7 @@ app.layout = dbc.Container([
                                 children=[html.Div(id="total_movies")],
                                 style={'display': "flex", 'position': "absolute", 'top': 0, 'left': 30}
                             ),
-                            style={'display': "flex", 'position': "absolute", 'top': 80, 'left': 112, 'textAlign': "center", 'color': "#000000"}
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'left': "10%", 'textAlign': "center", 'color': "#000000"}
                         )
                     )
                 ])
@@ -86,7 +106,7 @@ app.layout = dbc.Container([
                     html.Strong(
                         html.Div(
                             "Total Actors",
-                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'left': 440, 'textAlign': "center", 'color': "#000000"}
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'left': "34.2%", 'textAlign': "center", 'color': "#000000"}
                         )
                     ),
                     html.Div(
@@ -95,7 +115,7 @@ app.layout = dbc.Container([
                                 children=[html.Div(id="total_actors")],
                                 style={'display': "flex", 'position': "absolute", 'top': 0, 'left': 30}
                             ),
-                            style={'display': "flex", 'position': "absolute", 'top': 80, 'left': 441, 'textAlign': "center", 'color': "#000000"}
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'left': "34.3%", 'textAlign': "center", 'color': "#000000"}
                         )
                     )
                 ])
@@ -106,7 +126,7 @@ app.layout = dbc.Container([
                     html.Strong(
                         html.Div(
                             "Average Runtime",
-                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'right': 425, 'textAlign': "center", 'color': "#000000"}
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'right': "32.8%", 'textAlign': "center", 'color': "#000000"}
                         )
                     ),
                     html.Div(
@@ -115,7 +135,7 @@ app.layout = dbc.Container([
                                 children=[html.Div(id="avg_runtime")],
                                 style={'display': "flex", 'position': "absolute", 'top': 0, 'right': 0}
                             ),
-                            style={'display': "flex", 'position': "absolute", 'top': 80, 'right': 485, 'textAlign': "center", 'color': "#000000"}
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'right': "37%", 'textAlign': "center", 'color': "#000000"}
                         )
                     )
                 ])
@@ -126,7 +146,7 @@ app.layout = dbc.Container([
                     html.Strong(
                         html.Div(
                             "mins",
-                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 103, 'right': 440, 'textAlign': "center", 'color': "#000000"}
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 103, 'right': "34%", 'textAlign': "center", 'color': "#000000"}
                         )
                     )
                 ])
@@ -137,7 +157,7 @@ app.layout = dbc.Container([
                     html.Strong(
                         html.Div(
                             "Average Rating",
-                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'right': 110, 'textAlign': "center", 'color': "#000000"}
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'right': "8.6%", 'textAlign': "center", 'color': "#000000"}
                         )
                     ),
                     html.Div(
@@ -146,7 +166,7 @@ app.layout = dbc.Container([
                                 children=[html.Div(id="avg_rating")],
                                 style={'display': "flex", 'position': "absolute", 'top': 0, 'right': 0}
                             ),
-                            style={'display': "flex", 'position': "absolute", 'top': 80, 'right': 140, 'textAlign': "center", 'color': "#000000"}
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'right': "11.1%", 'textAlign': "center", 'color': "#000000"}
                         )
                     )
                 ])
@@ -164,7 +184,7 @@ app.layout = dbc.Container([
                 # Genre Checklist
                 html.H6(
                     "Select Genre(s):",
-                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
                 ),
                 dbc.Checklist(
                     id="genres-checklist",
@@ -180,7 +200,7 @@ app.layout = dbc.Container([
                 # Top N actors
                 html.H6(
                     "Top N (actors):",
-                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.Slider(
                     id="top_n",
@@ -196,7 +216,7 @@ app.layout = dbc.Container([
                 # Year Range
                 html.H6(
                     "Year Range:",
-                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.RangeSlider(
                     id="years-range",
@@ -215,7 +235,7 @@ app.layout = dbc.Container([
                 # Region dropdown
                 html.H6(
                     "Select Region(s):",
-                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.Dropdown(
                     id="region-checklist",
@@ -243,7 +263,7 @@ app.layout = dbc.Container([
                     html.Div([
                         html.H6(
                             "Distribution of movies by Genre",
-                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
                         )
                     ]),
                     html.Div([
@@ -266,7 +286,7 @@ app.layout = dbc.Container([
                                 html.Div(id='ycol_title', style={'display': 'inline'}),
                                 " by Genre over Time"
                             ],
-                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
                         )
                     ]),
                     html.Div([
@@ -283,7 +303,7 @@ app.layout = dbc.Container([
                         dbc.Col([
                             html.H6(
                                 "Select Y-axis:",
-                                style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506"}
                                 ),
                         ],
                         width=4
@@ -317,7 +337,7 @@ app.layout = dbc.Container([
                                 html.Div(id='top_n_val', style={'display': 'inline'}),
                                 " Actors from the best rated movies"
                             ],
-                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506"}
                         ),
                     ]),
                     html.Div([
@@ -336,7 +356,7 @@ app.layout = dbc.Container([
                     html.Div([
                         html.H6(
                             "Top rated movie in each region",
-                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'fontWeight': "bold", 'background': "#DBA506"}
                         ),
                     ]),
                     html.Div([
@@ -358,7 +378,7 @@ app.layout = dbc.Container([
         )
     ])
 ],
-style={'border': "6px solid gold"}
+style={'border': "6px solid gold", 'fontFamily': "Bahnschrift Condensed"}
 )
 
 # Callback to filter data based on filter values
@@ -476,6 +496,17 @@ def total_movies_count(df):
     df = pd.read_json(df)  # Convert the filtered data from a json string to a df
     avg_rating = df["averageRating"].mean().round(1)
     return avg_rating
+
+# Information
+@app.callback(
+    Output("collapse", "is_open"),
+    [Input("collapse-button", "n_clicks")],
+    [State("collapse", "is_open")],
+)
+def toggle_collapse(n, is_open):
+    if n:
+        return not is_open
+    return is_open
 
 if __name__ == '__main__':
     app.run_server(debug=True)
