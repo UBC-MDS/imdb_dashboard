@@ -21,21 +21,16 @@ def generate_bar_chart(data, top):
     alt.renderers.set_embed_options(theme='dark')
     x = 'averageRating'
     y = 'primaryName'
+    t = 'primaryTitle'
 
-    actors = (data[[x, y]]
-            .groupby([y])[x]
+    actors = (data[[x, y, t]]
+            .groupby([y, t])[x]
             .mean()
             .sort_values(ascending=False)
             .head(top))
     actors = pd.DataFrame.from_dict(actors)
     actors = actors.reset_index()
-    actors.columns = [y, x]
-
-    actors = (data[
-        data.primaryName.isin(actors.primaryName)
-        ][["primaryName", "averageRating", "primaryTitle"]]
-        .sort_values("averageRating", ascending=False)
-        .head(top))
+    actors.columns = [y, t, x]
 
     chart = alt.Chart(
         data=actors
@@ -52,7 +47,7 @@ def generate_bar_chart(data, top):
                         scale=alt.Scale(scheme="darkgold",
                                         domain=[15, 3]),
                         legend=None),
-        tooltip=[alt.Tooltip('primaryTitle', title="Top Movie")]
+        tooltip=[alt.Tooltip(t, title="Top Movie:")]
     ).mark_bar(
     )
 
