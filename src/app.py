@@ -1,3 +1,4 @@
+
 from dash import Dash, html, dcc, Input, Output
 import altair as alt
 import dash_bootstrap_components as dbc
@@ -19,7 +20,7 @@ data = pd.merge(data, country_codes, left_on="region", right_on="alpha_2")
 
 # Setup app and layout/frontend
 app = Dash(external_stylesheets=[dbc.themes.CYBORG])
-app.title = "IMDB Dashboard"
+app.title = "IMDb Dashboard"
 server = app.server
 app.layout = dbc.Container([
     dcc.Store(id="filtered-data"),  # Used to store the data as it is filtered
@@ -27,21 +28,135 @@ app.layout = dbc.Container([
     # First row containing only the title
     dbc.Row([
         dbc.Col([
+            html.Img(
+                src="assets/projector.gif",
+                id="projector",
+                style={'width': "120%"}
+            )
+        ],
+        width=1),
+        dbc.Col([
             html.Div([
                 html.Div(
                     "IMDb Dashboard",
                     style={'font-size': 50, 'display': "inline", 'color': "#DBA506"}
                 ),
                 html.Div("Plan your next movie.",
-                    style={'font-size': 20, 'display': "flex", 'position': "absolute", 'top': "40px", 'right': "0px", 'color': "#F2DB83"}
+                    style={'font-size': 20, 'display': "flex", 'position': "absolute", 'top': 40, 'right': 5, 'color': "#F2DB83"}
                 )
-            ],
-            style={'margin-bottom': "3px", 'position': "relative", 'border-bottom': "6px solid gold"}
-            )
-        ])
+            ])
+        ],
+        width=11,
+        style={'position': "relative"}
+        )
     ]),
 
-    # Second row containing filters towards left and charts toward right
+    # Second row containing reel image and KPIs
+    dbc.Row([
+        html.Div([
+            # Reel image
+            html.Img(
+                src="assets/reel.png",
+                id="reel",
+                style={'width': "100%", 'height': "200px", 'background': "#DBA506"}
+            ),
+            # KPI: Total Movies
+            html.Div([
+                dbc.Row([
+                    html.Strong(
+                        html.Div(
+                            "Total Movies",
+                            style={'fontSize': 20, 'display': "inline-block", 'position': "absolute", 'top': 50, 'left': 110, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    ),
+                    html.Div(
+                        html.H2(
+                            dcc.Loading(
+                                children=[html.Div(id="total_movies")],
+                                style={'display': "flex", 'position': "absolute", 'top': 0, 'left': 30}
+                            ),
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'left': 112, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    )
+                ])
+            ]),
+            # KPI: Total Actors
+            html.Div([
+                dbc.Row([
+                    html.Strong(
+                        html.Div(
+                            "Total Actors",
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'left': 440, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    ),
+                    html.Div(
+                        html.H2(
+                            dcc.Loading(
+                                children=[html.Div(id="total_actors")],
+                                style={'display': "flex", 'position': "absolute", 'top': 0, 'left': 30}
+                            ),
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'left': 441, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    )
+                ])
+            ]),
+            # KPI: Average Runtime
+            html.Div([
+                dbc.Row([
+                    html.Strong(
+                        html.Div(
+                            "Average Runtime",
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'right': 425, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    ),
+                    html.Div(
+                        html.H2(
+                            dcc.Loading(
+                                children=[html.Div(id="avg_runtime")],
+                                style={'display': "flex", 'position': "absolute", 'top': 0, 'right': 0}
+                            ),
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'right': 485, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    )
+                ])
+            ]),
+            # "mins" label
+            html.Div([
+                dbc.Row([
+                    html.Strong(
+                        html.Div(
+                            "mins",
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 103, 'right': 440, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    )
+                ])
+            ]),
+            # KPI: Average Rating
+            html.Div([
+                dbc.Row([
+                    html.Strong(
+                        html.Div(
+                            "Average Rating",
+                            style={'fontSize': 20, 'display': "flex", 'position': "absolute", 'top': 50, 'right': 110, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    ),
+                    html.Div(
+                        html.H2(
+                            dcc.Loading(
+                                children=[html.Div(id="avg_rating")],
+                                style={'display': "flex", 'position': "absolute", 'top': 0, 'right': 0}
+                            ),
+                            style={'display': "flex", 'position': "absolute", 'top': 80, 'right': 140, 'textAlign': "center", 'color': "#000000"}
+                        )
+                    )
+                ])
+            ])
+        ],
+        style={'width': "100%", 'position': "relative", 'border-top': "6px solid gold", 'border-bottom': "6px solid gold"}
+        )
+    ]),
+    
+    # Third row containing filters towards left and charts toward right
     dbc.Row([
         # First column containing filters separated by dividers
         dbc.Col([
@@ -49,7 +164,7 @@ app.layout = dbc.Container([
                 # Genre Checklist
                 html.H6(
                     "Select Genre(s):",
-                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
                 ),
                 dbc.Checklist(
                     id="genres-checklist",
@@ -59,19 +174,13 @@ app.layout = dbc.Container([
                             ) if genre != "nan"
                         ],
                     value=["Action", "Horror", "Romance"],
-                    style={'width': "150px", 'height': "100%"}
-                ),
-                html.Br(),
-                # Region dropdown
-                html.H6(
-                    "Select Region(s):",
-                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'height': "100%", 'color': "#DBA506"}
                 ),
                 html.Br(),
                 # Top N actors
                 html.H6(
                     "Top N (actors):",
-                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.Slider(
                     id="top_n",
@@ -84,10 +193,10 @@ app.layout = dbc.Container([
                     tooltip={"placement": "bottom", "always_visible": True}
                 ),
                 html.Br(),
-                # Years
+                # Year Range
                 html.H6(
-                    "Years:",
-                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                    "Year Range:",
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.RangeSlider(
                     id="years-range",
@@ -102,10 +211,11 @@ app.layout = dbc.Container([
                     dots=True,
                     tooltip={"placement": "bottom", "always_visible": False}
                 ),
+                html.Br(),
                 # Region dropdown
                 html.H6(
                     "Select Region(s):",
-                    style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                    style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
                 ),
                 dcc.Dropdown(
                     id="region-checklist",
@@ -118,164 +228,70 @@ app.layout = dbc.Container([
                     clearable=False,
                     placeholder="Select Region(s)",
                     value=["United States of America", "India"],
-                    style={'width': "150px", 'height': "100px", 'color': "#DBA506", 'background': "#222222"}
+                    style={'width': "100%", 'height': "100px", 'color': "#DBA506", 'background': "#000000"}
                 ),
             ])
         ],
-        width="auto"
+        width=2,
+        style={'border-right': "6px solid gold"}
         ),
         # Second column containing charts separated by title boxes
         dbc.Col([
             dbc.Row([
+                # Distribution of movies by Genre
                 dbc.Col([
-                    # KPI Total Movies
-                    dbc.Row([
-                        html.Div([
-                            html.H6(
-                                "Total Movies",
-                                style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                            )
-                        ])
+                    html.Div([
+                        html.H6(
+                            "Distribution of movies by Genre",
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
+                        )
                     ]),
-                    dbc.Row([
-                        html.Div([
-                            dcc.Loading(
-                                type="circle",
-                                children=html.H2(
-                                    children=[html.Div(id='total_movies', style={'display': 'inline'})],
-                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
-                                )
+                    html.Div([
+                        dcc.Loading(
+                            type="graph",
+                            children=html.Iframe(
+                                id='box',
+                                style={'width': "100%", 'height': "350px", 'border': "1px solid gold"}
                             )
-                        ]),
-                    ]),
-                    # Total Actors
-                    dbc.Row([
-                        html.Div([
-                            html.H6(
-                                "Total Actors",
-                                style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                            )
-                        ])
-                    ]),
-                    dbc.Row([
-                        html.Div([
-                            dcc.Loading(
-                                type="circle",
-                                children=html.H2(
-                                    children=[html.Div(id='total_actors', style={'display': 'inline'})],
-                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
-                                )
-                            )
-                        ])
-                    ]),
-                    # KPI Average Runtime
-                    dbc.Row([
-                        html.Div([
-                            html.H6(
-                                "Average Runtime",
-                                style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                            )
-                        ])
-                    ]),
-                    dbc.Row([
-                        html.Div([
-                            dcc.Loading(
-                                type="circle",
-                                children=html.H2(
-                                    children=[
-                                        html.Div(id='avg_runtime', style={'display': 'inline'}),
-                                        html.Div("mins", style={'display': 'inline', 'font-size': "15px"})
-                                    ],
-                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
-                                )
-                            )
-                        ])
-                    ]),
-                    # KPI Average Rating
-                    dbc.Row([
-                        html.Div([
-                            html.H6(
-                                "Average Rating",
-                                style={'width': "150px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                            )
-                        ])
-                    ]),
-                    dbc.Row([
-                        html.Div([
-                            dcc.Loading(
-                                type="circle",
-                                children=html.H2(
-                                    children=[html.Div(id='avg_rating', style={'display': 'inline'})],
-                                    style={'width': "150px", 'height': "60px", 'text-align': "center", 'vertical-align': "middle", 'color': "#DBA506", 'border': "1px solid gold"}
-                                )
-                            )
-                        ])
-                    ])  
-                ],
-                width="auto"
-                ),
-                dbc.Col([
-                    # Distribution of movies by Genre
-                    dbc.Row([
-                        html.Div([
-                            html.H6(
-                                "Distribution of movies by Genre",
-                                style={'width': "450px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                            )
-                        ])
-                    ]),
-                    dbc.Row([
-                        html.Div([
-                            dcc.Loading(
-                                type="graph",
-                                children=html.Iframe(
-                                    id='box',
-                                    style={'width': "450px", 'height': "350px", 'border': "1px solid gold"}
-                                )
-                            )
-                        ])
+                        )
                     ])
                 ],
-                width="auto"
+                width=6
                 ),
+                # Average Revenue/Runtime by Genre over Time
                 dbc.Col([
-                    # Average Revenue/Runtime by Genre over Time
-                    dbc.Row([
-                        html.Div([
-                            html.H6(
-                                children=[
-                                    html.Div(id='ycol_title', style={'display': 'inline'}),
-                                    " by Genre over Time"
-                                ],
-                                style={'width': "474px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                            )
-                        ])
+                    html.Div([
+                        html.H6(
+                            children=[
+                                html.Div(id='ycol_title', style={'display': 'inline'}),
+                                " by Genre over Time"
+                            ],
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506", 'margin-top': "6px"}
+                        )
                     ]),
-                    dbc.Row([
-                        html.Div([
-                            dcc.Loading(
-                                type="graph",
-                                children=html.Iframe(
-                                    id='line',
-                                    style={'width': "474px", 'height': "320px", 'border': "1px solid gold"}
-                                )
+                    html.Div([
+                        dcc.Loading(
+                            type="graph",
+                            children=html.Iframe(
+                                id='line',
+                                style={'width': "100%", 'height': "320px", 'border': "1px solid gold"}
                             )
-                        ])
+                        )
                     ]),
                     dbc.Row([
                     # Y-axis of line chart
                         dbc.Col([
                             html.H6(
                                 "Select Y-axis:",
-                                style={'width': "130px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                                style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
                                 ),
                         ],
-                        width="auto"
+                        width=4
                         ),
                         dbc.Col([
                             dcc.RadioItems(
                                 id='ycol',
-                                style={'width': "310px", 'height': "20px"},
+                                style={'width': "100%", 'height': "20px"},
                                 value='averageRating',
                                 inline=True,
                                 inputStyle={'margin-right': "10px", 'margin-left': "10px"},
@@ -285,11 +301,11 @@ app.layout = dbc.Container([
                                 ]
                             )
                         ],
-                        width="auto"
+                        width=8
                         )
                     ]),
                 ],
-                width={'size': "auto", 'offset': 0}
+                width=6
                 )
             ]),
             dbc.Row([
@@ -301,49 +317,49 @@ app.layout = dbc.Container([
                                 html.Div(id='top_n_val', style={'display': 'inline'}),
                                 " Actors from the best rated movies"
                             ],
-                            style={'width': "340px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
                         ),
-                    ])
-                ]),
-                dbc.Col([
-                    html.Div([
-                        html.H6(
-                            "Top rated movie in each region",
-                            style={'width': "750px", 'color': "#000000", 'font-weight': "bold", 'background': "#DBA506"}
-                        ),
-                    ])
-                ]),
-            ]),
-            dbc.Row([
-                dbc.Col([
+                    ]),
                     html.Div([
                         dcc.Loading(
                             type="graph",
                             children=html.Iframe(
                                 id='bar',
-                                style={'width': "340px", 'height': "350px", 'border': "1px solid gold"}
+                                style={'width': "100%", 'height': "350px", 'border': "1px solid gold"}
                             )
                         )
                     ])
-                ]),
+                ],
+                width=4
+                ),
                 dbc.Col([
+                    html.Div([
+                        html.H6(
+                            "Top rated movie in each region",
+                            style={'width': "100%", 'color': "#000000", 'textAlign': "center", 'font-weight': "bold", 'background': "#DBA506"}
+                        ),
+                    ]),
                     html.Div([
                         dcc.Loading(
                             type="graph",
                             color="#DBA506",
                             children=html.Iframe(
                                 id='map',
-                                style={'width': "750px", 'height': "350px", 'border': "1px solid gold"}
+                                style={'width': "100%", 'height': "350px", 'border': "1px solid gold"}
                             )
                         )
                     ])
-                ])
-            ])
+                ],
+                width=8
+                ),
+            ]),
         ],
-        width="auto"
+        width=10
         )
     ])
-])
+],
+style={'border': "6px solid gold"}
+)
 
 # Callback to filter data based on filter values
 @app.callback(
